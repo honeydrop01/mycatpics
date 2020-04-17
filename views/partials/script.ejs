@@ -1,0 +1,35 @@
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+  integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+  integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+  integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ionicons/5.0.1/ionicons.min.js"
+  integrity="sha256-Gnr2m5MEl/wJ9lPeq+qJT3Ru41GJxVxHpjkYQJvde6w=" crossorigin="anonymous"></script>
+
+<script>
+  var buttons = document.querySelectorAll(".pawing-button");
+  buttons.forEach(function (butt) {
+    butt.addEventListener("click", function (e) {
+      e.preventDefault();
+      e.target.classList.toggle("icon-rotated");
+      let id = e.target.id;
+      console.log(id);
+      // you have to have a clear understanding that this code is executed in the user's computer
+      // and the other is on the server
+      fetch('wallpaper/' + id + '/like')
+        .then(function (response) {
+          // The API call was successful!
+          return response.text().then((text) => {
+            like_id = '#like_' + id;
+            document.querySelector(like_id).innerHTML = text;
+          });
+        })
+        .catch(function (err) {
+          // There was an error
+          console.warn('Something went wrong.', err);
+        });
+    });
+  });
+
+</script>

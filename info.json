@@ -1,0 +1,45 @@
+[
+    {
+        "id": "0",
+        "name": "brown.jpg",
+        "description": "its a pic of a brown cat duh",
+        "likes": "116",
+    },
+    {
+        "id": "1",
+        "name": "description",
+        "white.jpg; obviously its a white cat yw",
+        "likes": "159",
+    },
+    {
+        "id": "2",
+        "name": "hunt.jpg",
+        "description": " a hunting cat",
+        "likes":"145},
+    },
+    {  
+    "id": "3",
+    "name": "butterfly.jpg",
+    "description": "a cat with a butterfly on his nose haha",
+    "ikes": "178",
+    },
+
+    {
+    "id": "5",
+    "name": "grey.jpg",
+    "description": "its a gry kittin",
+    "likes": "154"
+    },
+    {
+    "id": "6",
+    "name": "hi.jpg",
+    "description": "a kittin looks like its saying hi",
+    "likes": "143"
+    },
+    {
+    "id": "7",
+    "name": "hug.jpg",
+    "description": "a cat that is hugging",
+    "likes": "113"
+    }
+]

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+<% include partials/head %>
+
+</head>
+<body>
+  <% include partials/navbar %>
+
+  <div id="demo" class="carousel slide" data-ride="carousel">
+    <ul class="carousel-indicators">
+      <li data-target="#theCarousel" data-slide-to="0" class="active"></li>
+      <li data-target="#theCarousel" data-slide-to="1"></li>
+      <li data-target="#theCarousel" data-slide-to="2"></li>
+    </ul>
+    <div class="carousel-inner" style="height: 400px;">
+      <div class="carousel-item active" style="height: 400px; background-position: center;background-size: cover;
+     background-image: url('images/cats/Cat.jpg');">
+        <div class="carousel-caption ml-auto mr-auto">
+          <p><a href="#" id='mybtn' class="btn btn-primary btn-sm">download picture</a></p>
+          <p>HI hooman LOOK AT ME . YES! im a pretty cat dont u think? WAIT ,pet me hooman please XD</p>
+        </div>
+      </div>
+      <div class="carousel-item"
+        style="height: 400px;  background-position: center;background-size: cover; background-image: url('images/cats/thonk.jpg');">
+
+      </div>
+      <div class="carousel-item" style="height: 400px;  background-position: center;background-size: cover;
+     background-image: url('images/cats/kk.jpg');">
+        <div class="carousel-caption ml-auto mr-auto">
+          <p>im just a depressed kitten looking for food </p>
+          <p><a href="#" class="btn btn-primary btn-sm">articles</a></p>
+        </div>
+      </div>
+    </div>
+    <a class="carousel-control-prev" href="#demo" data-slide="prev">
+      <span class="carousel-control-prev-icon"></span>
+    </a>
+    <a class="carousel-control-next" href="#demo" data-slide="next">
+      <span class="carousel-control-next-icon"></span>
+    </a>
+  </div>
+
+  <nav id="nav2" class="navbar navbar-expand-sm justify-content-center">
+    <ul class="navbar-nav">
+      <li class="nav-item active">
+        <a class="nav-link" href="#">popular images</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">yesterday</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">last week</a>
+      </li>
+    </ul>
+  </nav>
+
+  <div class="gallery container no-gutters mx-auto">
+    <!--row adds some margin and this removes it n no gutters class="mx-auto" puts margin to auto n center the thumpnails margin: 0 auto;-->
+    <div class="row text-center text-lg-left">
+      <% for(i=0; i < images.length; i++) {%>
+      <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div class="thumbnail mb-4">
+          <a class="d-block h-100" href="wallpaper/<%= images[i].path %>">
+            <img class="img-fluid img-thumbnail" src="/images/cats/thumbnails/<%= images[i].path %>" alt="Lights" style="width:100%">
+            <div class="d-none gallery-shadow">
+              <ion-icon class="pawing-button" id="<%= images[i].id %>" name="paw"></ion-icon>
+              <span class="like text-light p-10" id="like_<%= images[i].id %>"><%=images[i].likes%></span>
+            </div>
+          </a>
+        </div>
+      </div>
+      <% } %>
+    </div>
+  </div>
+
+  <% include partials/footer %>
+  <% include partials/script %>
+</body>
+</html>

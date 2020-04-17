@@ -1,0 +1,49 @@
+ 
+ 
+ <nav class="navbar navbar-expand-lg navbar-light">
+  <a class="navbar-brand" href="/">
+    <img src="/images/icon.png" width="30" height="30" alt="">
+  </a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item <%= pageName == 'home' ? 'active' : '' %>">
+        <a class="nav-link" href="/"> <span class="sr-only">(current)</span>home</a>
+      </li>
+      <li class="nav-item <%= pageName == 'discover' ? 'active' : '' %>">
+        <a class="nav-link"id='dis' href="/discover">discover</a>
+      </li>
+      <li class="nav-item <%= pageName == 'articles' ? 'active' : '' %>">
+        <a class="nav-link" href="#">articles</a>
+      </li>
+    </ul>
+    <form class="form-inline my-2 my-lg-0">
+      <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+      <button class="btn btn-outline-secondary my-2 my-sm-0" type="submit">Search</button>
+    </form>
+    <% if(user){ %>
+      <div class="dropdown">
+        <a class="dropdown-toggle m-1 p-1 " href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          account
+        </a>
+        <div class="dropdown-menu">
+           <!-- show the name ofo the user logged  -->
+          <a class="dropdown-item"><%=user.name%></a>
+          <div class="dropdown-divider"></div>
+          <!-- this take to logout route -->
+          <a class=" dropdown-item" href="/logout">logout</a>
+          <a class="dropdown-item" href="#">profile</a>
+          <a class="dropdown-item" href="#">channels</a>
+        </div>
+      </div>
+    <% } else { %>
+      <a class="nav-link m-1 p-1" href="/signup">signup</a>
+      <a href="/login" class="nav-link m-1 p-1">login</a>
+    <% } %>
+  </div>
+</nav>
+ 
+ 
