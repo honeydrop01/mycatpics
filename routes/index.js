@@ -10,8 +10,10 @@ router.get('/', function (req, res, next) {
 
   // const directoryPath = path.join(__dirname, '../public/images/cats/thumbnails');
   // images = fs.readdirSync(directoryPath);
-  var content = fs.readFileSync('info.json', 'utf8');
+  const content = fs.readFileSync('info.json', 'utf8');
+  console.log(content);
   images = JSON.parse(content);
+  console.log(images);
   // for (i = 0; i < content.length; i++) {
   //   const line = content[i].split(';');
   //   image = {
@@ -101,56 +103,29 @@ router.get("/logout",function(req,res,next){
   res.redirect('/login')
 });
 
-"localhost:3000/wallpaper/90000/like"
 router.get('/wallpaper/:id/like', function (req, res, next) {
-  var content = fs.readFileSync('info', 'utf8').split('\n');
-  let images = [];
-  for (i = 0; i < content.length; i++) {
-    const line = content[i].split(';');
-    const image = {
-      id: line[0],
-      path: line[1],
-      description: line[2],
-      likes: line[3],
-    };
-    images.push(image);
-  }
+  const content = fs.readFileSync("info.json");
+  let images = JSON.parse(content);
 
   id = req.params.id;
 
   // images is a list of image
-  let img = null;
+  let likes = "";
   for (i = 0; i < images.length; i++) {
-    console.log("comparing : ", id);
     let image = images[i];
     if (image.id == id) {
-      img = ++image.likes;
+      likes = ++image.likes;
     }
   }
 
-  // images
-  let data = [];
-  for (i = 0; i < images.length; i++) {
-    const line = [
-      images[i].id,
-      images[i].path,
-      images[i].description,
-      images[i].likes,
-    ].join(";");
-    data.push(line);
-  }
-
-  data = data.join("\n");
-
-  console.log('here');
-  fs.writeFile('info', data, function (err) {
+  let data = JSON.stringify(images);
+  fs.writeFile('info.json', data, function (err) {
     if (err) {
       return console.error(err);
     }
   });
-  console.log('here');
 
-  res.send("" + img);
+  res.send("" + likes);
 });
 
 router.get('/discover', function (req, res, next) {
