@@ -1,31 +1,24 @@
 var express = require('express');
 var router = express.Router();
+var database = require('./database');
 
 //requiring path and fs modules
 const path = require('path');
 const fs = require('fs');
 
 /* GET home page. */
-router.get('/', function (req, res, next) {
+router.get('/', async function (req, res, next) {
 
-  // const directoryPath = path.join(__dirname, '../public/images/cats/thumbnails');
-  // images = fs.readdirSync(directoryPath);
-  const content = fs.readFileSync('info.json', 'utf8');
-  console.log(content);
-  images = JSON.parse(content);
-  console.log(images);
-  // for (i = 0; i < content.length; i++) {
-  //   const line = content[i].split(';');
-  //   image = {
-  //     id: line[0],
-  //     path: line[1],
-  //     description: line[2],
-  //     likes: line[3],
-  //   };
-   // images.push(image);
-  //}
+  text = 'SELECT * FROM images';
+  var rows = [];
+  try {
+    var {rows} = await database.query(text);
+  }
+  catch (error) {
+    console.log(error);
+  }
 
-  res.render('index', { menuId: 'home', images: images, pageName: 'home' });
+  res.render('index', { menuId: 'home', images: rows, pageName: 'home' });
 });
 
 router.get('/wallpaper/:name', function (req, res, next) {
@@ -38,26 +31,16 @@ router.get('/signup', function (req, res, next) {
   res.render('signup', { pageName: 'signup' });
 });
 
-router.post('/signup', function(req, res, next) {
-  // read our list of user from the file
-  var content = fs.readFileSync('users.json', 'utf8');
-  // convert it into a javascript list
-  list_of_users = JSON.parse(content);
-  // add the new user to it
-  list_of_users.push({
-      name: req.body.name,
-      email: req.body.email,
-      password: req.body.password,
-    });
-  // convert it again to a string
-  content = JSON.stringify(list_of_users);
+router.post('/signup', async function(req, res, next) {
 
-  // save it back
-  fs.writeFile("users.json", content, function(err){
-    if (err) {
-      return console.error(err);
-    }
-  })
+  query = `INSERT INTO users (name, email, password)
+           VALUES ('${req.body.name}', '${req.body.email}', '${req.body.password}')`;
+
+  try {
+    await database.query(query);
+  } catch(error) {
+    console.log(error);
+  }
     
   res.redirect('/login');
 });
@@ -66,15 +49,22 @@ router.get('/login', function (req, res, next) {
   res.render('login', { pageName: 'login' });
 });
 
-router.post("/login",function(req,res,next) {
+router.post("/login",async function(req,res,next) {
+  text= 'SELECT * FROM users';
+  rows =[];
+  try{
+    var {rows} = await database.query(text);
+  }catch(error) {
+    console.log(error);
+  }
   const email = req.body.email;
   const password = req.body.password;
   const check = req.body.check;
 
   // read our list of user from the file
-  var content = fs.readFileSync('users.json', 'utf8');
+  //var content = fs.readFileSync('users.json', 'utf8');
   // convert it into a javascript list
-  list_of_users = JSON.parse(content);
+  list_of_users = rows;
 
   // compare the email and password of the authenticator with the users
   // 🤔 🤔🤔🤔🤔🤔🤔🤔🤔🤔🤔🤔🤔🤔
@@ -103,29 +93,44 @@ router.get("/logout",function(req,res,next){
   res.redirect('/login')
 });
 
-router.get('/wallpaper/:id/like', function (req, res, next) {
-  const content = fs.readFileSync("info.json");
-  let images = JSON.parse(content);
-
+router.get('/wallpaper/:id/like', async function (req, res, next) {
   id = req.params.id;
 
-  // images is a list of image
-  let likes = "";
-  for (i = 0; i < images.length; i++) {
-    let image = images[i];
-    if (image.id == id) {
-      likes = ++image.likes;
-    }
+  text = 'SELECT * FROM images WHERE id = ' + id;
+
+  try{
+    var {rows} = await database.query(text);
+    var image = rows[0];
+  }catch(error) {
+    console.log(error);
+    res.send(404);
+    return;
   }
 
-  let data = JSON.stringify(images);
-  fs.writeFile('info.json', data, function (err) {
-    if (err) {
-      return console.error(err);
-    }
-  });
+  let likes = "";
+  likes = ++image.likes;
+
+  const query = `UPDATE images SET likes = ${likes} WHERE id = ${id}`;
+  try{
+    await database.query(query);
+  }catch (error) {
+    console.log(error);
+  }
 
   res.send("" + likes);
+});
+
+router.get('/discover', async function (req, res, next) {
+
+  text = 'SELECT * FROM images';
+  var rows = [];
+  try {
+    var {rows} = await database.query(text);
+  }
+  catch (error) {
+    console.log(error);
+  }
+  res.render('discover', { pageName: 'discover' ,images:rows})
 });
 
 router.get('/discover', function (req, res, next) {
