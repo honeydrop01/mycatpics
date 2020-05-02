@@ -1,15 +1,19 @@
 html{
-
+	height: 100%;
 	font-size: 16px;
     font-family: 'Roboto', sans-serif;
-
-
 }
 
 body{
 	background-image:url(images/paw.jpg);
 	color:#929699 !important;
+	height: 100%;
+	display: flex;
+  	flex-direction: column;
 
+}
+.content{
+	flex: 1 0 auto;
 }
 /*-------NAVBAR---------*/
 
@@ -103,6 +107,7 @@ footer{
 	width: 100%;
 	padding: 20px 0px;
 	background-color: #fee6dc;
+	flex-shrink: 0;
 }
 
 .copy{
@@ -154,4 +159,45 @@ footer ion-icon{
 .icon-rotated {
   /* transform: rotate(360deg); */
   animation: pulse 0.5s 1 ease-in;
+}
+.jumbotron{
+	position: relative;
+	display: flex;
+	height: 30%;
+	background-color:#bd84a4;
+	margin-bottom: 0px;
+	padding:0px;
+	align-items: flex-end;
+	justify-content: flex-start;
+}
+.rounded-circle{
+	margin-left: 20px;
+	position: relative;
+	height: 200px;
+	object-fit: cover;
+	top: 75px;
+}
+@media all and (max-width: 500px){
+	.rounded-circle{
+		justify-content: space-around;
+		display: flex;
+	}
+}
+.follow{
+	margin-right: 15px;
+	padding-right: 15px;
+	margin-left: 15px;
+	padding-left: 15px;
+
+}
+.followers{
+	margin-left: 15px;
+	padding-left: 15px;
+	padding-right: 15px;
+	margin-right: 15px;
+}
+#user-name{
+	margin-left: 10px;
+	flex-grow: 2;
+	color: #ffff!important;
 }

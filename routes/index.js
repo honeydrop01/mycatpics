@@ -133,7 +133,15 @@ router.get('/discover', async function (req, res, next) {
   res.render('discover', { pageName: 'discover' ,images:rows})
 });
 
-router.get('/discover', function (req, res, next) {
-  res.render('discover', { pageName: 'discover' })
+router.get('/profile', async function (req, res, next) {
+  text = 'SELECT * FROM images';
+  var rows = [];
+  try {
+    var {rows} = await database.query(text);
+  }
+  catch (error) {
+    console.log(error);
+  }
+  res.render('profile', { pageName: 'profile' ,images:rows})
 });
 module.exports = router;

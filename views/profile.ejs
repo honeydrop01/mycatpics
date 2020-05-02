@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <% include partials/head %>
+</head>
+
+<body>
+<% include partials/navbar %>
+  <div class="content">
+    <div class="jumbotron jumbotron-fluid">
+      <img src="/images/cats/side.jpg" class="rounded-circle" alt="profile pic">
+      <h1 id="user-name">Honeydrop</h1>
+      <div class="links">
+        <a href="#" class="followers text-light"> 22 followers</a>
+        <a href="#" class="following text-light"> 5 following</a>
+        <a href="#" class="follow btn btn-primary btn-sm">follow</a>
+      </div>
+    </div>
+    <div class="gallery container no-gutters mx-auto p-5">
+      <div class="row text-center text-lg-left">
+        <% for(i=0; i < images.length; i++) {%>
+        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+          <div class="thumbnail mb-4">
+            <a class="d-block h-100" href="wallpaper/<%= images[i].path %>">
+              <img class="img-fluid img-thumbnail" src="/images/cats/thumbnails/<%= images[i].path %>" alt="Lights"
+                style="width:100%">
+              <div class="d-none gallery-shadow">
+                <ion-icon class="pawing-button" id="<%= images[i].id %>" name="paw"></ion-icon>
+                <span class="like text-light p-10" id="like_<%= images[i].id %>"><%=images[i].likes%></span>
+              </div>
+            </a>
+          </div>
+        </div>
+        <% } %>
+        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+          <button class="add-pic btn btn-primary"> add picture</button>
+        </div>
+      </div>
+    </div>
+    <% include partials/footer %>
+  </div>
+  <% include partials/script %>
+</body>
+
+</html>
