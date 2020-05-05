@@ -5,15 +5,14 @@
 </head>
 <body>
   <% include partials/navbar %>
-
   <div class="container my-5">
     <div class="row">
       <div class="col-md-8">
-        <img class="img-fluid mx-auto d-block" src="/images/cats/<%= file %>">
+        <img class="img-fluid mx-auto d-block" src="<%= image.imageUrl %>">
       </div>
       <div class="col-md-4 mx-auto">
-        <h2><%= file %></h2>
-        <p><a href="/images/cats/<%= file %>" class="btn btn-primary btn-sm">download picture</a></p>
+        <h2><%= image.description %></h2>
+        <p><a href="<%= image.imageUrl %>" class="btn btn-primary btn-sm">download picture</a></p>
       </div>
     </div>
   </div>

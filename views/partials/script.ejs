@@ -17,7 +17,7 @@
       console.log(id);
       // you have to have a clear understanding that this code is executed in the user's computer
       // and the other is on the server
-      fetch('wallpaper/' + id + '/like')
+      fetch('/wallpapers/' + id + '/like')
         .then(function (response) {
           // The API call was successful!
           return response.text().then((text) => {

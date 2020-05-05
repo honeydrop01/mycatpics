@@ -160,11 +160,13 @@ footer ion-icon{
   /* transform: rotate(360deg); */
   animation: pulse 0.5s 1 ease-in;
 }
+
+/*-----profile-----*/
 .jumbotron{
 	position: relative;
 	display: flex;
 	height: 30%;
-	background-color:#bd84a4;
+	background-image:url(images/lick.jpg);
 	margin-bottom: 0px;
 	padding:0px;
 	align-items: flex-end;
@@ -173,6 +175,7 @@ footer ion-icon{
 .rounded-circle{
 	margin-left: 20px;
 	position: relative;
+	width: 200px;
 	height: 200px;
 	object-fit: cover;
 	top: 75px;

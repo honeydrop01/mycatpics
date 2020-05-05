@@ -1,13 +1,49 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <% include partials/head %>
 </head>
+
 <body>
   <% include partials/navbar %>
-<h1>ONLY AUTHORIZED USERS </h1>
+  <div class="gallery container no-gutters mx-auto">
+    <!--row adds some margin and this removes it n no gutters class="mx-auto" puts margin to auto n center the thumpnails margin: 0 auto;-->
+    <div class="row text-center text-lg-left">
+      <div class="col-8">
+        <div class="row text-cente text-lg-left">
+          <% for(i=0; i < images.length; i++) {%>
+            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+              <div class="thumbnail mb-4">
+                <a class="d-block h-100" href="wallpaper/<%= images[i].path %>">
+                  <img class="img-fluid img-thumbnail" src="/images/cats/thumbnails/<%= images[i].path %>" alt="Lights"
+                    style="width:100%">
+                  <div class="d-none gallery-shadow">
+                    <ion-icon class="pawing-button" id="<%= images[i].id %>" name="paw"></ion-icon>
+                    <span class="like text-light p-10" id="like_<%= images[i].id %>"><%=images[i].likes%></span>
+                  </div>
+                </a>
+              </div>
+            </div>
+          <% } %>
+        </div>
+      </div>
+      <div class="col-4">
+        <div class="card">
+          <img class="card-img-top" src="/images/cats/thumbnails/original.jpg" alt="Card image cap">
+          <div class="card-body">
+            <h5 class="card-title">Card title</h5>
+            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's
+              content.</p>
+            <a href="#" class="btn btn-primary">Go somewhere</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <% include partials/footer %>
   <% include partials/script %>
 </body>
+
 </html>

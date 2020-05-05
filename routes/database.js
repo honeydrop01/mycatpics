@@ -7,10 +7,9 @@ const pool = new Pool({
 });
 
 // a generic query, that executes all queries you send to it
-function query(text) {
+function query(text, values = []) {
   return new Promise((resolve, reject) => {
-    pool
-      .query(text)
+    pool.query(text, values)
       .then((res) => {
         resolve(res);
       }).catch((err) => {

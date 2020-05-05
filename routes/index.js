@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var database = require('./database');
+var formidable = require('formidable');
 
 //requiring path and fs modules
 const path = require('path');
@@ -8,8 +9,7 @@ const fs = require('fs');
 
 /* GET home page. */
 router.get('/', async function (req, res, next) {
-
-  text = 'SELECT * FROM images';
+  text = 'SELECT id, name, description, likes FROM wallpapers';
   var rows = [];
   try {
     var {rows} = await database.query(text);
@@ -18,13 +18,31 @@ router.get('/', async function (req, res, next) {
     console.log(error);
   }
 
+  for (let i = 0; i < rows.length; i++) {
+    rows[i].thumbnailUrl = '/wallpapers/'+ rows[i].id +'/thumbnail';
+  }
+
   res.render('index', { menuId: 'home', images: rows, pageName: 'home' });
 });
 
-router.get('/wallpaper/:name', function (req, res, next) {
-  file = req.params.name;
-  catName = req.query.cat;
-  res.render('wallpaper', { name: catName, file: file, pageName: 'wallpaper' });
+router.get('/wallpapers/:id', async function (req, res, next) {
+  id = req.params.id;
+  query = "SELECT id, likes, description FROM wallpapers WHERE id = " + id;
+  var rows =[];
+  try{
+    var {rows} = await database.query(query);
+    console.log(rows);
+    var image = rows;
+  }catch(error) {
+    console.log(error);
+    res.send(404);
+    return;
+  }
+  console.log(id);
+  image.imageUrl = '/wallpapers/' + id + '/image';
+  
+  // catName = req.query.cat;
+  res.render('wallpaper', { image: image, pageName: 'wallpaper' });
 });
 
 router.get('/signup', function (req, res, next) {
@@ -93,7 +111,7 @@ router.get("/logout",function(req,res,next){
   res.redirect('/login')
 });
 
-router.get('/wallpaper/:id/like', async function (req, res, next) {
+router.get('/wallpapers/:id/like', async function (req, res, next) {
   id = req.params.id;
 
   text = 'SELECT * FROM images WHERE id = ' + id;
@@ -134,7 +152,8 @@ router.get('/discover', async function (req, res, next) {
 });
 
 router.get('/profile', async function (req, res, next) {
-  text = 'SELECT * FROM images';
+  // TODO get only the wallpapers of the current user. and liked wallpapers
+  text = 'SELECT id, name, description, likes FROM wallpapers';
   var rows = [];
   try {
     var {rows} = await database.query(text);
@@ -142,6 +161,72 @@ router.get('/profile', async function (req, res, next) {
   catch (error) {
     console.log(error);
   }
-  res.render('profile', { pageName: 'profile' ,images:rows})
+
+  for (let i = 0; i < rows.length; i++) {
+  rows[i].thumbnailUrl = '/wallpapers/' + rows[i].id +'/thumbnail';
+  }
+
+  // TODO get the logged in user
+  const user = {
+    profilePicture: "",
+  };
+
+  // set a default profile picture if the user doesn't have one
+  if (!user.profilePicture) {
+    user.profilePicture = "images/profilePicture.jpg"
+  }
+
+  res.render('profile', { pageName: 'profile', user, images:rows})
 });
+
+router.post('/wallpapers', function (req, res, next) {
+
+  var form = new formidable.IncomingForm();
+  form.parse(req, async function (err, fields, files) {
+
+    const name = files.img.name;
+    var oldpath = files.img.path;
+
+    const file = fs.readFileSync(oldpath);
+
+    const sharp = require('sharp');
+    const thumbnail = await sharp(oldpath).resize(300).toBuffer();
+
+    const query = `insert into wallpapers(name, img, thumbnail, description, likes, created_at)
+      VALUES ($1, $2, $3, $4, 0, current_timestamp)`;
+
+    try {
+      await database.query(query, [name, file, thumbnail, fields.description]);
+    } catch(error) {
+      console.log(error);
+    }
+
+    res.redirect('/')
+  });
+});
+
+router.get('/wallpapers/:id/:type', async function (req, res, next) {
+  const type = req.params.type;
+  if (type == 'thumbnail') {
+    var column_name = 'thumbnail';
+  }
+  else if (type == 'image') {
+    var column_name = 'img';
+  } else {
+    return res.send(404);
+  }
+
+  const text = "SELECT "+column_name+" FROM wallpapers WHERE id = "+ req.params.id;
+
+  try {
+    var {rows} = await database.query(text);
+    var image = rows[0][column_name];
+  } catch (error) {
+    return res.send(status);
+  }
+
+  res.contentType('image/jpeg');
+  res.send(image);
+
+ });
 module.exports = router;
