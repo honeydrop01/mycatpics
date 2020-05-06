@@ -103,7 +103,6 @@ router.post("/login",async function(req,res,next) {
   res.redirect(redirect);
 });
 
-// TODO create logout route
 router.get("/logout",function(req,res,next){
   req.session.destroy(function(){
     console.log("user logged out.")
@@ -152,8 +151,7 @@ router.get('/discover', async function (req, res, next) {
 });
 
 router.get('/profile', async function (req, res, next) {
-  // TODO get only the wallpapers of the current user. and liked wallpapers
-  text = 'SELECT id, name, description, likes FROM wallpapers';
+  text = 'SELECT id, name, description, likes FROM wallpapers WHERE user_id = ' + req.session.user.id;
   var rows = [];
   try {
     var {rows} = await database.query(text);
@@ -192,11 +190,17 @@ router.post('/wallpapers', function (req, res, next) {
     const sharp = require('sharp');
     const thumbnail = await sharp(oldpath).resize(300).toBuffer();
 
-    const query = `insert into wallpapers(name, img, thumbnail, description, likes, created_at)
-      VALUES ($1, $2, $3, $4, 0, current_timestamp)`;
+    const query = `insert into wallpapers(name, img, thumbnail, description, likes, user_id, created_at)
+      VALUES ($1, $2, $3, $4, 0, $5, current_timestamp)`;
 
     try {
-      await database.query(query, [name, file, thumbnail, fields.description]);
+      await database.query(query, [
+        name,
+        file,
+        thumbnail,
+        fields.description,
+        req.session.user.id,
+      ]);
     } catch(error) {
       console.log(error);
     }
