@@ -113,7 +113,7 @@ router.get("/logout",function(req,res,next){
 router.get('/wallpapers/:id/like', async function (req, res, next) {
   id = req.params.id;
 
-  text = 'SELECT * FROM images WHERE id = ' + id;
+  text = 'SELECT id, name, description, likes FROM wallpapers WHERE id = ' + id;
 
   try{
     var {rows} = await database.query(text);
@@ -127,7 +127,7 @@ router.get('/wallpapers/:id/like', async function (req, res, next) {
   let likes = "";
   likes = ++image.likes;
 
-  const query = `UPDATE images SET likes = ${likes} WHERE id = ${id}`;
+  const query = `UPDATE wallpapers SET likes = ${likes} WHERE id = ${id}`;
   try{
     await database.query(query);
   }catch (error) {
@@ -139,7 +139,7 @@ router.get('/wallpapers/:id/like', async function (req, res, next) {
 
 router.get('/discover', async function (req, res, next) {
 
-  text = 'SELECT * FROM images';
+  text = 'SELECT * FROM wallpapers';
   var rows = [];
   try {
     var {rows} = await database.query(text);
