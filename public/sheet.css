@@ -204,3 +204,8 @@ footer ion-icon{
 	flex-grow: 2;
 	color: #ffff!important;
 }
+#mypic{
+	justify-content: space-around;
+	justify-content: center;
+
+}

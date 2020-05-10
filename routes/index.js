@@ -135,6 +135,15 @@ router.get('/wallpapers/:id/like', async function (req, res, next) {
   }
 
   res.send("" + likes);
+
+  const add = `INSERT into likes (user_id, wallpaper_id)
+    VALUES (${req.session.user.id}, ${id})`;
+
+  try {
+    await database.query(add);
+  } catch(error) {
+    console.log(error);
+  }
 });
 
 router.get('/discover', async function (req, res, next) {
@@ -174,7 +183,25 @@ router.get('/profile', async function (req, res, next) {
     user.profilePicture = "images/profilePicture.jpg"
   }
 
-  res.render('profile', { pageName: 'profile', user, images:rows})
+  const qqq = `SELECT DISTINCT likes.wallpaper_id, wallpapers.likes
+    FROM likes JOIN wallpapers
+    ON wallpapers.id = likes.wallpaper_id
+    WHERE likes.user_id = ${req.session.user.id}`;
+
+  var favorite = [];
+  try {
+    const {rows} = await database.query(qqq);
+    favorite = rows
+  } catch (error) {
+    console.log(error);
+  }
+
+  for (let i = 0; i < favorite.length; i++) {
+    favorite[i].thumbnailUrl = '/wallpapers/' + favorite[i].wallpaper_id +'/thumbnail';
+    console.log( favorite[i].thumbnailUrl);
+  }
+
+  res.render('profile', { pageName: 'profile', user, images: rows, favorite: favorite})
 });
 
 router.post('/wallpapers', function (req, res, next) {

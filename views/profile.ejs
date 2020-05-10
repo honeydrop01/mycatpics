@@ -17,35 +17,67 @@
         <a href="#" class="follow btn btn-primary btn-sm">follow</a>
       </div>
     </div>
-    <div class="gallery container no-gutters mx-auto p-5">
-      <div class="row text-center text-lg-left">
-        <% for(i=0; i < images.length; i++) {%>
-        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-          <div class="thumbnail mb-4">
-            <a class="d-block h-100" href="/wallpapers/<%= images[i].id %>">
-              <img class="img-fluid img-thumbnail" src="<%= images[i].thumbnailUrl %>" alt="Lights"
-                style="width:100%">
-              <div class="d-none gallery-shadow">
-                <ion-icon class="pawing-button" id="<%= images[i].id %>" name="paw"></ion-icon>
-                <span class="like text-light p-10" id="like_<%= images[i].id %>"><%=images[i].likes%></span>
+    <ul  id="mypic" class="nav nav-tab">
+      <li class="nav-item">
+        <a class="nav-link" data-toggle="tab" href="#favorite">favorite</a>
+      </li>
+      <li  class="nav-item ">
+        <a class="nav-link active" data-toggle="tab" href="#mypictures">my pictures</a>
+      </li>
+    </ul>
+    <div class="tab-content">
+      <div class="tab-pane container fade" id="favorite">
+        <div class="gallery container no-gutters mx-auto p-5">
+          <div class="row text-center text-lg-left">
+            <% for(i=0; i < favorite.length; i++) {%>
+            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+              <div class="thumbnail mb-4">
+                <a class="d-block h-100" href="/wallpapers/<%= favorite[i].id %>">
+                  <img class="img-fluid img-thumbnail" src="<%= favorite[i].thumbnailUrl %>" alt="Lights" style="width:100%">
+                  <div class="d-none gallery-shadow">
+                    <ion-icon class="pawing-button" id="<%= favorite[i].id %>" name="paw"></ion-icon>
+                    <span class="like text-light p-10" id="like_<%= favorite[i].id %>"></span>
+                  </div>
+                </a>
               </div>
-            </a>
+            </div>
+            <% } %>
           </div>
         </div>
-        <% } %>
-        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-          <form action="/wallpapers" enctype="multipart/form-data" method="POST">
-            <label for="#">Name</label>
-            <input type="text" name="name">
-            <label for="#">description</label>
-            <textarea type="text" name="description"></textarea>
-            <label for="img">Select image:</label>
-            <input type="file" id="img" name="img" accept="image/*">
-            <input type="submit">
-          </form>
+      </div>
+      <div class="tab-pane container active" id="mypictures">
+        <div class="gallery container no-gutters mx-auto p-5">
+          <div class="row text-center text-lg-left">
+            <% for(i=0; i < images.length; i++) {%>
+            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+              <div class="thumbnail mb-4">
+                <a class="d-block h-100" href="/wallpapers/<%= images[i].id %>">
+                  <img class="img-fluid img-thumbnail" src="<%= images[i].thumbnailUrl %>" alt="Lights" style="width:100%">
+                  <div class="d-none gallery-shadow">
+                    <ion-icon class="pawing-button" id="<%= images[i].id %>" name="paw"></ion-icon>
+                    <span class="like text-light p-10" id="like_<%= images[i].id %>"><%=images[i].likes%></span>
+                  </div>
+                </a>
+              </div>
+            </div>
+            <% } %>
+            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+              <form action="/wallpapers" enctype="multipart/form-data" method="POST">
+                <label for="#">Name</label>
+                <input type="text" name="name">
+                <label for="#">description</label>
+                <textarea type="text" name="description"></textarea>
+                <label for="img">Select image:</label>
+                <input type="file" id="img" name="img" accept="image/*">
+                <input type="submit">
+              </form>
+            </div>
+          </div>
         </div>
       </div>
     </div>
+
+
     <% include partials/footer %>
   </div>
   <% include partials/script %>
