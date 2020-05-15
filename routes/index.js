@@ -68,45 +68,36 @@ router.get('/login', function (req, res, next) {
 });
 
 router.post("/login",async function(req,res,next) {
-  text= 'SELECT * FROM users';
-  rows =[];
-  try{
-    var {rows} = await database.query(text);
-  }catch(error) {
-    console.log(error);
-  }
   const email = req.body.email;
   const password = req.body.password;
   const check = req.body.check;
 
-  // read our list of user from the file
-  //var content = fs.readFileSync('users.json', 'utf8');
-  // convert it into a javascript list
-  list_of_users = rows;
-
-  // compare the email and password of the authenticator with the users
-  // 🤔 🤔🤔🤔🤔🤔🤔🤔🤔🤔🤔🤔🤔🤔
-  console.log("info : ", email, password);
-  let redirect = "/signup";
-  for(i = 0 ;i < list_of_users.length; i++){
-    console.log("comp : ", list_of_users[i].email, list_of_users[i].password);
-    if(list_of_users[i].email==email){
-      if(list_of_users[i].password==password){
-        console.log('Information matches');
-        req.session.user = list_of_users[i];
-        redirect = "/";
-        console.log('logged in ', req.session.user_id);
-        break;
-      }
+  text = `SELECT id, name FROM users WHERE email = '${email}' AND password = '${password}'`;
+  rows = [];
+  try {
+    var { rows, rowCount } = await database.query(text);
+    if (rowCount == 0) {
+      res.redirect('/login');
+      return;
     }
+  } catch (error) {
+    console.log(error);
   }
-  res.redirect(redirect);
+
+  req.session.user = rows[0];
+
+  // 🤔 🤔🤔🤔🤔🤔🤔🤔🤔🤔🤔🤔🤔🤔
+  if (check) {
+    res.cookie('user', req.session.user);
+  }
+  res.redirect('/profile');
 });
 
 router.get("/logout",function(req,res,next){
   req.session.destroy(function(){
     console.log("user logged out.")
- });
+  });
+  res.clearCookie('user');
   res.redirect('/login')
 });
 

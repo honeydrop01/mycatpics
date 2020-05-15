@@ -30,10 +30,12 @@ app.use(session({
 
 app.use(function(req, res, next){
 
-  user = req.session.user ? req.session.user : null;
+  if(!req.session.user && req.cookies.user) {
+      req.session.user = req.cookies.user;
+  }
 
   res.locals = {
-    user: user,
+    user: req.session.user,
   }
   return next();
 });
